@@ -1,0 +1,23 @@
+{
+  "name": "curiosity26/restkit",
+  "description": "A framework to create REST API Clients",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Alex Boyce",
+      "email": "curiosity26@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"": "src/"}
+  },
+  "require": {
+    "php": ">=5.4",
+    "ext-curl": "*",
+    "ext-json": ">=1.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.4-stable"
+  }
+}
