@@ -35,6 +35,36 @@ class Request {
       : '\\RESTKit\\Response\\Response';
   }
 
+  public function setUrl($url) {
+    $this->request->setUrl($url);
+
+    return $this;
+  }
+
+  public function getUrl() {
+    return $this->request->getUrl();
+  }
+
+  public function setMethod($method) {
+    $this->request->setMethod($method);
+
+    return $this;
+  }
+
+  public function getMethod() {
+    return $this->request->getMethod();
+  }
+
+  public function setPort($port) {
+    $this->request->setPort($port);
+
+    return $this;
+  }
+
+  public function getPort() {
+    return $this->request->getPort();
+  }
+
   public function setData($data) {
     $this->request->setBody($data);
 
