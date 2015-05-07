@@ -33,13 +33,15 @@ class HTTPRequest {
   const METHOD_CONNECT = 'CONNECT';
   const METHOD_JSON = 'JSON';
 
+  /* Authentication Constants */
+  const HTTP_AUTH_ANY = CURLAUTH_ANY;
+  const HTTP_AUTH_ANYSAFE = CURLAUTH_ANYSAFE;
+  const HTTP_AUTH_BASIC = CURLAUTH_BASIC;
+  const HTTP_AUTH_DIGEST = CURLAUTH_DIGEST;
+  const HTTP_AUTH_NTLM = CURLAUTH_NTLM;
+  const HTTP_AUTH_GSSNEGOTIATE = CURLAUTH_GSSNEGOTIATE;
+
   /* Authorization Constants */
-  const AUTH_ANY = CURLAUTH_ANY;
-  const AUTH_ANYSAFE = CURLAUTH_ANYSAFE;
-  const AUTH_BASIC = CURLAUTH_BASIC;
-  const AUTH_DIGEST = CURLAUTH_DIGEST;
-  const AUTH_NTLM = CURLAUTH_NTLM;
-  const AUTH_GSSNEGOTIATE = CURLAUTH_GSSNEGOTIATE;
   const AUTH_TOKEN = 'Token';
   const AUTH_OAUTH = 'OAuth';
   const AUTH_BEARER = 'Bearer';
@@ -169,8 +171,7 @@ class HTTPRequest {
    * @param null $password
    *
    * @description
-   * Authorization and Authentication are two separate operations but the setup
-   * is shared under one method because they can't happen at the same time.
+   * Authorization and Authentication are two separate operations.
    * Authorization must happen before Authentication. Sometimes Authorization
    * happens at the time a token is generated and displayed in a user account on
    * a website. Then the request just needs authorized with the provided token.
@@ -188,40 +189,53 @@ class HTTPRequest {
    * method makes HTTP Authentication vulnerable to attacks where the username
    * and password can be captured and used without your knowledge.
    *
-   * OAuth and
-   * Token Authentication methods are typically more secure, however, if a token
-   * is captured, the service provider usually has a limited window for its use
-   * (such as OAuth provides) or the token can be retracted once the breach is
-   * deteced.
+   * OAuth and Token Authentication methods are typically more secure, however,
+   * if a token is captured, the service provider usually has a limited window
+   * for its use (such as OAuth provides) or the token can be retracted once the
+   * breach is detected.
    */
   public function setHttpAuth($authType, $username, $password = null)
   {
     if (in_array(
       $authType,
-      array(
-        self::AUTH_ANY,
-        self::AUTH_ANYSAFE,
-        self::AUTH_BASIC,
-        self::AUTH_DIGEST,
-        self::AUTH_NTLM,
-        self::AUTH_GSSNEGOTIATE
-      )
+      $this->getAuthenticationTypes()
     )) {
       $this->authMethod = $authType;
-      $this->authCredentials = $username .(null !== $password ?: ':' . $password);
+      $this->authCredentials = $username.(null !== $password ?: ':' . $password);
     }
-    elseif (in_array($authType, array(self::AUTH_TOKEN, self::AUTH_OAUTH, self::AUTH_BEARER))) {
+  }
+
+  public function setAuthorization($authMethod, $token) {
+    if (in_array($authMethod, array(self::AUTH_TOKEN, self::AUTH_OAUTH, self::AUTH_BEARER))) {
       $this->authMethod = null;
-      $this->removeHeader('Authentication')
-        ->removeHeader('X-Auth-Token')
-        ->addHeader('Authorization', "$authType $username"); // The token will be in place of the username
+      $this->removeHeader('X-Auth-Token')
+        ->addHeader('Authorization', "$authMethod $token");
     }
-    elseif ($authType === self::AUTH_XAUTHTOKEN) {
+    elseif ($authMethod === self::AUTH_XAUTHTOKEN) {
       $this->authMethod = null;
-      $this->removeHeader('Authentication')
-        ->removeHeader('Authorization')
-        ->addHeader('X-Auth-Token', $username);
+      $this->removeHeader('Authorization')
+        ->addHeader('X-Auth-Token', $token);
     }
+  }
+
+  public function getAuthenticationTypes() {
+    return  array(
+      self::HTTP_AUTH_ANY,
+      self::HTTP_AUTH_ANYSAFE,
+      self::HTTP_AUTH_BASIC,
+      self::HTTP_AUTH_DIGEST,
+      self::HTTP_AUTH_NTLM,
+      self::HTTP_AUTH_GSSNEGOTIATE
+    );
+  }
+
+  public function getAuthorizationTypes() {
+    return array(
+      self::AUTH_TOKEN,
+      self::AUTH_OAUTH,
+      self::AUTH_BEARER,
+      self::AUTH_XAUTHTOKEN
+    );
   }
 
   public function setBody($data)

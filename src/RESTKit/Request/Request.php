@@ -62,8 +62,12 @@ class Request {
     return $this->request->getHeaders();
   }
 
-  public function setAuth($authType, $token, $secret = FALSE) {
-    $this->request->setHttpAuth($authType, $token, $secret);
+  public function setAuthentication($authType, $username, $password = null) {
+    $this->request->setHttpAuth($authType, $username, $password);
+  }
+
+  public function setAuthorization($authMethod, $token) {
+    $this->request->setAuthorization($authMethod, $token);
   }
 
   /**
