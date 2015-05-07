@@ -30,7 +30,7 @@ class Collection extends AbstractCollection {
 
   public function getItemClass() {
     return isset($this->itemClass) ?
-      $this->itemClass : '\\RESTKit\\JSONDataObject';
+      $this->itemClass : '\\RESTKit\\DynamicDataObject';
   }
 
   public function setItemClass($class = null) {

@@ -56,6 +56,21 @@ class JSONDataObjectTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals('ThisIsALon', $data->test);
   }
 
+  public function testDoubleProperty() {
+    $data = new \RESTKit\JSONDataObject();
+    $data->createProperty('test', new \RESTKit\Properties\DoubleProperty(12.02));
+
+    $this->assertEquals(12.02, $data->test);
+
+    $data->test = "13.19";
+
+    $this->assertEquals(13.19, $data->test);
+
+    $data->test = 11;
+
+    $this->assertEquals(11.0, $data->test);
+  }
+
   public function testDateTimeProperty() {
     $data = new \RESTKit\JSONDataObject();
     $data->createProperty('test',

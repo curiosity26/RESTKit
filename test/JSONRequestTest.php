@@ -31,8 +31,6 @@ class JSONRequestTest extends PHPUnit_Framework_TestCase {
     }
 
     $response = $request->send();
-    var_dump($response->getBody());
     $this->assertTrue($response->isSuccess());
-    #var_dump($response->getBody());
   }
 }

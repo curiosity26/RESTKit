@@ -41,4 +41,14 @@ class ClientRequest extends Request {
   public function getClient() {
     return $this->client;
   }
+
+  public function send() {
+    $client = $this->getClient();
+    $response = parent::send();
+    if (null !== $client && method_exists($response, 'setClient')) {
+      $response->setClient($this->getClient());
+    }
+
+    return $response;
+  }
 }

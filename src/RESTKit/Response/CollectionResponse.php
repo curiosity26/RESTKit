@@ -54,6 +54,11 @@ abstract class CollectionResponse extends Response {
         throw new \InvalidArgumentException("The provided Collection Class does not support the \\RESTKit\\Collection\\CollectionInterface");
       }
 
+      if (($client = $this->getClient()) !== null
+        && method_exists($collection, 'setClient')) {
+        $collection->setClient($client);
+      }
+
       $collection->rewind();
 
       return $collection->count() > 1 ? $collection : $collection->current();
