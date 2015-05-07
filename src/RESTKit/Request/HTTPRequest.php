@@ -69,6 +69,9 @@ class HTTPRequest {
     if (isset($port)) {
       $this->setPort($port);
     }
+
+    $this->addHeader('Host', isset($_SERVER['HTTP_HOST'])
+      ? $_SERVER['HTTP_HOST'] : 'localhost');
   }
 
   public function setUrl($url)
@@ -194,14 +197,14 @@ class HTTPRequest {
    * for its use (such as OAuth provides) or the token can be retracted once the
    * breach is detected.
    */
-  public function setHttpAuth($authType, $username, $password = null)
+  public function setAuthentication($authType, $username, $password = null)
   {
     if (in_array(
       $authType,
-      $this->getAuthenticationTypes()
+      self::getAuthenticationTypes()
     )) {
       $this->authMethod = $authType;
-      $this->authCredentials = $username.(null !== $password ?: ':' . $password);
+      $this->authCredentials = $username.(null !== $password ? ':' . $password : null);
     }
   }
 
@@ -218,7 +221,7 @@ class HTTPRequest {
     }
   }
 
-  public function getAuthenticationTypes() {
+  static public function getAuthenticationTypes() {
     return  array(
       self::HTTP_AUTH_ANY,
       self::HTTP_AUTH_ANYSAFE,
@@ -229,7 +232,7 @@ class HTTPRequest {
     );
   }
 
-  public function getAuthorizationTypes() {
+  static public function getAuthorizationTypes() {
     return array(
       self::AUTH_TOKEN,
       self::AUTH_OAUTH,

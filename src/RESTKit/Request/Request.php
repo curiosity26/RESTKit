@@ -13,11 +13,8 @@ class Request {
   protected $request;
   protected $response_class;
 
-  public function __construct($url = null, $method = "GET", $data = null, array $headers = array(), $port = 80) {
+  public function __construct($url = null, $method = "GET", $data = null, array $headers = array(), $port = null) {
     $this->request = new HTTPRequest($url, $method, $data, $headers, $port);
-
-    $this->request->addHeader('Host', isset($_SERVER['HTTP_HOST'])
-      ? $_SERVER['HTTP_HOST'] : 'localhost');
   }
 
   public function setResponseClass($class = null) {
@@ -63,11 +60,19 @@ class Request {
   }
 
   public function setAuthentication($authType, $username, $password = null) {
-    $this->request->setHttpAuth($authType, $username, $password);
+    $this->request->setAuthentication($authType, $username, $password);
   }
 
   public function setAuthorization($authMethod, $token) {
     $this->request->setAuthorization($authMethod, $token);
+  }
+
+  static public function getAuthenticationTypes() {
+    return HTTPRequest::getAuthenticationTypes();
+  }
+
+  static public function getAuthorizationTypes() {
+    return HTTPRequest::getAuthorizationTypes();
   }
 
   /**

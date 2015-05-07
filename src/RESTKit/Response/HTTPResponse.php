@@ -144,4 +144,15 @@ class HTTPResponse {
   {
     return isset($this->requestInfo['request_header']) ? $this->requestInfo['request_header'] : false;
   }
+
+  /**
+   * @return bool
+   */
+  public function isSuccess()
+  {
+    return in_array(
+      $this->getResponseCode(),
+      array(200, 201, 202, 206, 302, 304)
+    ); // 201 is reserved for successful posts
+  }
 }

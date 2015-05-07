@@ -13,34 +13,12 @@ use RESTKit\Client\RESTClientInterface;
 
 class JSONClientRequest extends JSONRequest {
 
-  /**
-   * @var \RESTKit\Client\RESTClientInterface
-   */
-  protected $client;
-
   public function __construct(RESTClientInterface $client = null, $url = null,
-    $data = null, array $headers = array(), $port = 80) {
+    $data = null, array $headers = array(), $port = null) {
     parent::__construct($url, $data, $headers, $port);
     if (null !== $client) {
       $this->setClient($client);
     }
   }
 
-  public function setClient(RESTClientInterface $client) {
-    $this->client = $client;
-    $authType = $this->client->getAuthType();
-
-    if (in_array($authType, $this->request->getAuthenticationTypes())) {
-      $this->setAuthentication($authType, $this->client->getAccessToken());
-    }
-    elseif (in_array($authType, $this->request->getAuthorizationTypes())) {
-      $this->setAuthorization($authType, $this->client->getAccessToken());
-    }
-
-    return $this;
-  }
-
-  public function getClient() {
-    return $this->client;
-  }
 }

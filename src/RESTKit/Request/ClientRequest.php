@@ -16,7 +16,7 @@ class ClientRequest extends Request {
   private $client;
 
   public function __construct(RESTClientInterface $client = null, $url = null,
-    $method = "GET", $data = null, array $headers = array(), $port = 80) {
+    $method = "GET", $data = null, array $headers = array(), $port = null) {
     parent::__construct($url, $method, $data, $headers, $port);
 
     if (null !== $client) {

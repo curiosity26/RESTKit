@@ -9,11 +9,12 @@
 namespace RESTKit\Request;
 
 
-class JSONRequest extends Request {
+class JSONRequest extends ClientRequest {
 
-  public function __construct($url = null, $data = null, array $headers = array(), $port = 80) {
+  public function __construct($url = null, $data = null, array $headers = array(), $port = null) {
     $headers['Accept'] = 'application/json';
-    parent::__construct($url, HTTPRequest::METHOD_JSON, $data, $headers, $port);
+    $headers['Content-Type'] = 'application/json';
+    parent::__construct(null, $url, HTTPRequest::METHOD_GET, $data, $headers, $port);
   }
 
   public function setResponseClass($class = null) {
@@ -32,5 +33,14 @@ class JSONRequest extends Request {
     return isset($this->response_class)
       ? $this->response_class
       : '\\RESTKit\\Response\\JSONResponse';
+  }
+
+  public function send() {
+    $data = $this->getData();
+    if (null !== $data) {
+      $this->request->setMethod(HTTPRequest::METHOD_JSON);
+    }
+
+    return parent::send();
   }
 }

@@ -9,6 +9,8 @@
 namespace RESTKit\Response;
 
 
+use RESTKit\Client\RESTClientInterface;
+
 class Response {
 
   protected $code;
@@ -19,6 +21,11 @@ class Response {
    */
   protected $response;
   protected $body;
+
+  /**
+   * @var \RESTKit\Client\RESTClientInterface
+   */
+  protected $client;
 
   public function __construct(HTTPResponse $response = null)
   {
@@ -81,14 +88,24 @@ class Response {
     return $this->body;
   }
 
+  public function setClient(RESTClientInterface $client) {
+    $this->client = $client;
+
+    return $this;
+  }
+
+  /**
+   * @return \RESTKit\Client\RESTClientInterface
+   */
+  public function getClient() {
+    return $this->client;
+  }
+
   /**
    * @return bool
    */
   public function isSuccess()
   {
-    return in_array(
-      $this->getResponseCode(),
-      array(200, 201, 202, 206, 302, 304)
-    ); // 201 is reserved for successful posts
+    return $this->getResponse()->isSuccess();
   }
 }

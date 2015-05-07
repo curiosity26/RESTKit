@@ -20,9 +20,17 @@ class Collection extends AbstractCollection {
    */
   private $client;
 
+  public function __construct(array $values = array()) {
+    if (!empty($values)) {
+      foreach ($values as $value) {
+        $this->append($value);
+      }
+    }
+  }
+
   public function getItemClass() {
     return isset($this->itemClass) ?
-      $this->itemClass : 'RESTKit\\JSONDataObject';
+      $this->itemClass : '\\RESTKit\\JSONDataObject';
   }
 
   public function setItemClass($class = null) {
