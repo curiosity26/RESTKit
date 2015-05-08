@@ -13,6 +13,9 @@ use RESTKit\Client\RESTClientInterface;
 
 class ClientRequest extends Request {
 
+  /**
+   * @var \RESTKit\Client\RESTClientInterface
+   */
   private $client;
 
   public function __construct(RESTClientInterface $client = null, $url = null,
@@ -26,25 +29,33 @@ class ClientRequest extends Request {
 
   public function setClient(RESTClientInterface $client) {
     $this->client = $client;
-    $authType = $this->client->getAuthType();
-
-    if (in_array($authType, $this->request->getAuthenticationTypes())) {
-      $this->setAuthentication($authType, $this->client->getAccessToken());
-    }
-    elseif (in_array($authType, $this->request->getAuthorizationTypes())) {
-      $this->setAuthorization($authType, $this->client->getAccessToken());
-    }
 
     return $this;
   }
 
+  /**
+   * @return RESTClientInterface
+   */
   public function getClient() {
     return $this->client;
   }
 
   public function send() {
     $client = $this->getClient();
+
+    if (null !== $client) {
+      $authType = $client->getAuthType();
+
+      if (in_array($authType, HTTPRequest::getAuthenticationTypes())) {
+        $this->setAuthentication($authType, $client->getAccessToken());
+      }
+      elseif (in_array($authType, HTTPRequest::getAuthorizationTypes())) {
+        $this->setAuthorization($authType, $client->getAccessToken());
+      }
+    }
+
     $response = parent::send();
+
     if (null !== $client && method_exists($response, 'setClient')) {
       $response->setClient($this->getClient());
     }

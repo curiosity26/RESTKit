@@ -10,7 +10,7 @@
     }
   ],
   "autoload": {
-    "psr-4": {"RESTKit\\": "src/RESTKit"}
+    "psr-4": {"RESTKit\\": "src/RESTKit/"}
   },
   "require": {
     "php": ">=5.4",

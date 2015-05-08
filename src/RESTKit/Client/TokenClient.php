@@ -15,6 +15,12 @@ class TokenClient implements RESTClientInterface {
 
   private $token;
 
+  public function __construct($token = null) {
+    if (null !== $token) {
+      $this->setAccessToken($token);
+    }
+  }
+
   public function getAuthType() {
     return HTTPRequest::AUTH_TOKEN;
   }
