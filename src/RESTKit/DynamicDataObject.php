@@ -18,7 +18,44 @@ use RESTKit\Properties\StringProperty;
 
 class DynamicDataObject extends JSONDataObject {
 
-  protected function createPropertyByGuessing($name, $value, $default = null) {
+  private $collection_class;
+
+  public function setCollectionClass($class = null) {
+    $this->collection_class = $class;
+
+    return $this;
+  }
+
+  public function getCollectionClass() {
+    return isset($this->collection_class) ? $this->collection_class :
+      '\\RESTKit\\Collection\\Collection';
+  }
+
+  protected function handleArrayData(array &$data, $default = null) {
+    if (!empty($data) && !is_integer(key($data))) {
+      $property = new ClassProperty(__CLASS__, $default,
+        array($data, $this->getClient()), true);
+      $data = $property->get();
+    }
+    elseif (!empty($data) && ($current = current($data))
+      && is_array($current)) {
+      $property = new ClassProperty($this->getCollectionClass(),
+        $default, array($data), true);
+      $data = $property->get();
+    }
+    else {
+      $property = new ClassProperty($this->getCollectionClass(), $default);
+    }
+
+    if (($client = $this->getClient()) !== null
+      && method_exists($data, 'setClient')) {
+      $data->setClient($client);
+    }
+
+    return $property;
+  }
+
+  public function createPropertyByGuessing($name, $value, $default = null) {
     $type = gettype($value);
 
     switch ($type) {
@@ -45,16 +82,20 @@ class DynamicDataObject extends JSONDataObject {
         $property = new DoubleProperty($default);
         break;
       case 'array':
-        $property = new ClassProperty(__CLASS__, $default);
+        $property = $this->handleArrayData($value, $default);
         break;
       default:
         if ($value instanceof \DateTimeInterface) {
           $property = new DateTimeProperty($default);
         }
-        else {
-          $property = new ClassProperty(__CLASS__, $default);
+        elseif ($value instanceof \stdClass) {
+          $value = (array)$value;
+          $property = $this->handleArrayData($value, $default);
         }
-
+        else {
+          $property = new ClassProperty(__CLASS__, $default,
+            array($value, $this->getClient()), true);
+        }
         break;
     }
     $property->set($value);

@@ -79,10 +79,38 @@ class DynamicDataObjectTest extends PHPUnit_Framework_TestCase {
     $item = new stdClass();
     $item->value1 = "Test";
     $data->test2 = $item;
-    $this->assertInstanceOf('stdClass', $data->test2);
+    $this->assertInstanceOf('\\RESTKit\\DynamicDataObject', $data->test2);
     $item2 = new ArrayIterator(array("item3", "item4"));
     $data->test3 = $item2;
     $this->assertInstanceOf("ArrayIterator", $data->test3);
     $this->assertContains("item4", $data->test3);
+
+    // Test for complex iterations
+    $sc = new stdClass();
+    $sc->part = "1";
+    $sc->thing = array(
+      "item5", "item6"
+    );
+    $sc->other = array(
+      "item7" => array("item8", "item9")
+    );
+    $item3 = array(
+      array(
+        "some" => 'thing',
+        "complex" => $sc
+      )
+    );
+
+    $data->test4 = $item3;
+    $this->assertInstanceOf('\\RESTKit\\Collection\\Collection', $data->test4);
+    $this->assertInstanceOf('\\RESTKit\\DynamicDataObject', $data->test4->current());
+    $this->assertEquals('thing', $data->test4->current()->some);
+    $this->assertInstanceOf('\\RESTKit\\DynamicDataObject', $data->test4->current()->complex);
+    $this->assertEquals(1, $data->test4->current()->complex->part);
+    $this->assertInternalType('array', $data->test4->current()->complex->thing);
+    $this->assertContains('item5', $data->test4->current()->complex->thing);
+    $this->assertInstanceOf('\\RESTKit\\DynamicDataObject', $data->test4->current()->complex->other);
+    $this->assertInternalType('array', $data->test4->current()->complex->other->item7);
+    $this->assertContains('item8', $data->test4->current()->complex->other->item7);
   }
 }
