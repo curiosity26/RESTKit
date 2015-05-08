@@ -29,7 +29,17 @@ class DynamicDataObject extends JSONDataObject {
         $property = new BooleanProperty($default);
         break;
       case 'string':
-        $property = new StringProperty($default);
+        if (preg_match('/\d{4}-\d{2}-\d{2}(T|\s)\d{1,2}:\d{2}(:\d{2})?/', $value) != FALSE) {
+          try {
+            $value = new \DateTime($value);
+            $property = new DateTimeProperty($default);
+          } catch(\Exception $e) {
+            $property = new StringProperty($default);
+          }
+        }
+        else {
+          $property = new StringProperty($default);
+        }
         break;
       case 'double':
         $property = new DoubleProperty($default);
