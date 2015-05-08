@@ -41,7 +41,7 @@ abstract class AbstractDataObject {
 
   public function __get($name)
   {
-    if ($name == 'id') {
+    if ($name == 'id' && empty($this->_properties['id'])) {
       $property = $this->_properties[$this->uniqueId];
     }
     elseif (!empty($this->_properties[$name])){

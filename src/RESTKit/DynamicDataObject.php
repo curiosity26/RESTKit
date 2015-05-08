@@ -107,8 +107,15 @@ class DynamicDataObject extends JSONDataObject {
   }
 
   public function __set($name, $value = null) {
-    if (null !== $value && empty($this->_properties[$name])) {
-      $this->createPropertyByGuessing($name, $value);
+    if (empty($this->_properties[$name])
+      || $this->_properties[$name] === null) {
+
+      if ($value !== null) {
+        $this->createPropertyByGuessing($name, $value);
+      }
+      else {
+        $this->_properties[$name] = null;
+      }
     }
     else {
       parent::__set($name, $value);
