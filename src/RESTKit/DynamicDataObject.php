@@ -33,14 +33,18 @@ class DynamicDataObject extends JSONDataObject {
 
   protected function handleArrayData(array &$data, $default = null) {
     if (!empty($data) && !is_integer(key($data))) {
+
       $property = new ClassProperty(__CLASS__, $default,
         array($data, $this->getClient()), true);
+
       $data = $property->get();
     }
     elseif (!empty($data) && ($current = current($data))
-      && is_array($current)) {
+      && (is_array($current) || $current instanceof \stdClass)) {
+
       $property = new ClassProperty($this->getCollectionClass(),
-        $default, array($data), true);
+        $default, array((array)$data), true);
+
       $data = $property->get();
     }
     else {
