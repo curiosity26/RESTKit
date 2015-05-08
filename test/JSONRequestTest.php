@@ -35,13 +35,14 @@ class JSONRequestTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testTokenClient() {
-    $client = new \RESTKit\Client\TokenClient('token="mytesttoken"');
+    $client = new \RESTKit\Client\TokenClient('token="mytoken"');
     $request = new \RESTKit\Request\JSONRequest();
     $request->setClient($client);
 
-    $request->setUrl("https://api.callrail.com/v1/companies"); // For basic testing, CallRail uses a token auth method
-    $response = $request->send();
+    // For basic testing, CallRail uses a token auth method
+    $request->setUrl("https://api.callrail.com/v1/companies.json");
+    $request->send(); // Auth headers aren't generated until the request is sent
 
-    $this->assertContains('Token token="mytesttoken"', $request->getHeaders());
+    $this->assertContains('Token token="mytoken"', $request->getHeaders());
   }
 }

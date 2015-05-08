@@ -69,9 +69,6 @@ class HTTPRequest {
     if (isset($port)) {
       $this->setPort($port);
     }
-
-    $this->addHeader('Host', isset($_SERVER['HTTP_HOST'])
-      ? $_SERVER['HTTP_HOST'] : 'localhost');
   }
 
   public function setUrl($url)
