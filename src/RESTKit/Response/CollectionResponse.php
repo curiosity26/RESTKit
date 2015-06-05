@@ -16,7 +16,7 @@ abstract class CollectionResponse extends Response {
 
   public function setCollectionClass($class = null) {
     if (null !== $class &&
-      in_array('RESTKit\Collection\CollectionInterface', class_implements($class))) {
+      in_array('RESTKit\Collection\CollectionInterface', class_parents($class))) {
       $this->collectionClass = $class;
     }
     else {
