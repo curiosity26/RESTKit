@@ -19,7 +19,7 @@ class Request {
 
   public function setResponseClass($class = null) {
     if (null !== $class
-      && in_array('RESTKit\\Response\\Response', class_implements($class))) {
+      && in_array('RESTKit\\Response\\Response', class_parents($class))) {
       $this->response_class = $class;
     }
     else {
