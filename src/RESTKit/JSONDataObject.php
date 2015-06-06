@@ -22,6 +22,9 @@ class JSONDataObject extends AbstractDataObject implements \JsonSerializable {
   public function __construct(array $values = null,
     RESTClientInterface $client = null)
   {
+
+    parent::__construct();
+
     if (isset($client)) {
       $this->setClient($client);
     }

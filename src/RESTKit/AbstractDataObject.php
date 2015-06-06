@@ -15,6 +15,10 @@ abstract class AbstractDataObject {
   protected $_properties = array();
   protected $uniqueId;
 
+  public function __construct() {
+    $this->initiate();
+  }
+
   public function createProperty($name, PropertyInterface $property) {
     $this->_properties[$name] = $property;
 
@@ -57,4 +61,6 @@ abstract class AbstractDataObject {
 
     return null;
   }
+
+  public function initiate() {}
 }
