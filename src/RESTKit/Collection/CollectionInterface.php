@@ -13,4 +13,5 @@ interface CollectionInterface extends \JsonSerializable, \Countable, \Iterator, 
   public function clear();
   public function item($id);
   public function getItemClass();
+  public function contains($object);
 }

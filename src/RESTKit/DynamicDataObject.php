@@ -9,6 +9,7 @@
 namespace RESTKit;
 
 
+use RESTKit\Properties\ArrayProperty;
 use RESTKit\Properties\BooleanProperty;
 use RESTKit\Properties\ClassProperty;
 use RESTKit\Properties\DateTimeProperty;
@@ -48,7 +49,7 @@ class DynamicDataObject extends JSONDataObject {
       $data = $property->get();
     }
     else {
-      $property = new ClassProperty($this->getCollectionClass(), $default);
+      $property = new ArrayProperty($default);
     }
 
     if (($client = $this->getClient()) !== null

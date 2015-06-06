@@ -124,6 +124,16 @@ abstract class AbstractCollection implements CollectionInterface {
     return $this;
   }
 
+  public function contains($object) {
+    foreach ($this->collection as $item) {
+      if ($item === $object) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   protected function formatItem($value) {
     if ($class = $this->getItemClass()) {
       if ($value instanceof $class) {
