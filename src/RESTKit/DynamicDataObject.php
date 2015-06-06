@@ -104,7 +104,7 @@ class DynamicDataObject extends JSONDataObject {
         break;
     }
     $property->set($value);
-    $this->createProperty($name, $property);
+    return $this->createProperty($name, $property);
   }
 
   public function __set($name, $value = null) {
