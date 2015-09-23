@@ -46,10 +46,10 @@ class ClientRequest extends Request {
     if (null !== $client) {
       $authType = $client->getAuthType();
 
-      if (in_array($authType, HTTPRequest::getAuthenticationTypes())) {
+      if (in_array($authType, $this->getAuthenticationTypes())) {
         $this->setAuthentication($authType, $client->getAccessToken());
       }
-      elseif (in_array($authType, HTTPRequest::getAuthorizationTypes())) {
+      elseif (in_array($authType, $this->getAuthorizationTypes())) {
         $this->setAuthorization($authType, $client->getAccessToken());
       }
     }

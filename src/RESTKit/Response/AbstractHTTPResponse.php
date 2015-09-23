@@ -9,7 +9,7 @@
 namespace RESTKit\Response;
 
 
-class HTTPResponse {
+abstract class AbstractHTTPResponse implements HTTPResponseInterface {
   protected $rawResponse;
   protected $rawHeader;
   protected $requestInfo = array();
@@ -60,67 +60,12 @@ class HTTPResponse {
     505 => "HTTP Version Not Supported"
   );
 
-
-  public function __construct($rawResponse = null, $requestInfo = null)
-  {
-    if (isset($requestInfo)) {
-      $this->setRequestInfo($requestInfo);
-    }
-
-    if (isset($rawResponse)) {
-      $this->parse($rawResponse,
-        isset($this->requestInfo['header_size']) && $this->getResponseCode(
-        ) != 201 ? $this->requestInfo['header_size'] : 0
-      );
-    }
-
-  }
-
-  public function setRequestInfo($requestInfo)
-  {
-    if (is_resource($requestInfo) && get_resource_type($requestInfo, 'curl')) {
-      $this->requestInfo = curl_getinfo($requestInfo);
-    } else {
-      $this->requestInfo = (array)$requestInfo;
-    }
-
-    return $this;
-  }
-
   public function getRequestInfo()
   {
     return $this->requestInfo;
   }
 
-  public function parse($rawResonse, $headerLength = 0)
-  {
-    $this->rawResponse = $rawResonse;
-    $this->rawHeader = substr($rawResonse, 0, $headerLength);
-    $this->response = substr($rawResonse, $headerLength);
-    $header_lines = explode(PHP_EOL, $this->rawHeader);
-    $headers = array();
-    if (!empty($header_lines)) {
-      foreach ($header_lines as $line) {
-        if (strpos($line, ':') != false) {
-          $header = explode(':', $line);
-          $headers[trim($header[0])] = trim($header[1]);
-        }
-      }
-    }
-    $this->headers = $headers;
-  }
-
-  public function getResponseCode()
-  {
-    return isset($this->requestInfo['http_code']) ? $this->requestInfo['http_code'] : false;
-  }
-
-  static public function getResponseStatus($responseCode)
-  {
-    return isset(self::$HTTP_RESPONSE_CODES[$responseCode]) ? self::$HTTP_RESPONSE_CODES[$responseCode] : false;
-  }
-
-  public function getResonseBody()
+  public function getResponseBody()
   {
     return $this->response;
   }
@@ -140,9 +85,9 @@ class HTTPResponse {
     return $this->rawResponse;
   }
 
-  public function getRequestHeader()
+  static public function getResponseStatus($responseCode)
   {
-    return isset($this->requestInfo['request_header']) ? $this->requestInfo['request_header'] : false;
+    return isset(self::$HTTP_RESPONSE_CODES[$responseCode]) ? self::$HTTP_RESPONSE_CODES[$responseCode] : false;
   }
 
   /**

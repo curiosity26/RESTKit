@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.4/phpunit.xsd"
+         backupGlobals="false"
+         verbose="true">
+    <php>
+        <env name="restpoint" value="http://localhost/"/>
+        <env name="authtype" value="TOKEN" />
+        <env name="username" value="" />
+        <env name="password" value="" />
+        <env name="accesstoken" value="" />
+    </php>
+</phpunit>

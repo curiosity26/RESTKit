@@ -9,22 +9,22 @@
 class JSONRequestTest extends PHPUnit_Framework_TestCase {
 
   public function testConnection() {
-    $request = new \RESTKit\Request\JSONRequest($_ENV['restpoint']);
+    $request = new \RESTKit\Request\JSON\JSONRequest($_ENV['restpoint']);
 
     if (!empty($_ENV['authtype'])) {
       if (in_array(
-        constant('\RESTKit\Request\HTTPRequest::' . $_ENV['authtype']),
+        constant('\RESTKit\Request\HTTPRequestInterface::' . $_ENV['authtype']),
         $request->getAuthenticationTypes()
       )) {
         $request->setAuthentication(
-          constant('\RESTKit\Request\HTTPRequest::' . $_ENV['authtype']),
+          constant('\RESTKit\Request\HTTPRequestInterface::' . $_ENV['authtype']),
           $_ENV['username'],
           !empty($_ENV['password']) ? $_ENV['password'] : NULL
         );
       }
       else {
         $request->setAuthorization(
-          constant('\RESTKit\Request\HTTPRequest::' . $_ENV['authtype']),
+          constant('\RESTKit\Request\HTTPRequestInterface::' . $_ENV['authtype']),
           $_ENV['accesstoken']
         );
       }
@@ -36,7 +36,7 @@ class JSONRequestTest extends PHPUnit_Framework_TestCase {
 
   public function testTokenClient() {
     $client = new \RESTKit\Client\TokenClient('token="mytoken"');
-    $request = new \RESTKit\Request\JSONRequest();
+    $request = new \RESTKit\Request\JSON\JSONRequest();
     $request->setClient($client);
 
     // For basic testing, CallRail uses a token auth method

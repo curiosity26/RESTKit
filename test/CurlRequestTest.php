@@ -6,25 +6,25 @@
  * Time: 10:03 AM
  */
 
-class HTTPRequestTest extends PHPUnit_Framework_TestCase {
+class CurlRequestTest extends PHPUnit_Framework_TestCase {
 
   public function testConnection() {
-    $request = new \RESTKit\Request\HTTPRequest($_ENV['restpoint']);
+    $request = new \RESTKit\Request\Curl\CurlRequest($_ENV['restpoint']);
 
     if (!empty($_ENV['authtype'])) {
       if (in_array(
-        constant('\RESTKit\Request\HTTPRequest::' . $_ENV['authtype']),
+        constant('\RESTKit\Request\HTTPRequestInterface::' . $_ENV['authtype']),
         $request->getAuthenticationTypes()
       )) {
         $request->setAuthentication(
-          constant('\RESTKit\Request\HTTPRequest::' . $_ENV['authtype']),
+          constant('\RESTKit\Request\HTTPRequestInterface::' . $_ENV['authtype']),
           $_ENV['username'],
           !empty($_ENV['password']) ? $_ENV['password'] : NULL
         );
       }
       else {
         $request->setAuthorization(
-          constant('\RESTKit\Request\HTTPRequest::' . $_ENV['authtype']),
+          constant('\RESTKit\Request\HTTPRequestInterface::' . $_ENV['authtype']),
           $_ENV['accesstoken']
         );
       }

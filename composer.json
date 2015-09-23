@@ -3,6 +3,7 @@
   "description": "A framework to create REST API Clients",
   "minimum-stability": "stable",
   "license": "proprietary",
+  "version": "1.1.0",
   "authors": [
     {
       "name": "Alex Boyce",
@@ -10,7 +11,7 @@
     }
   ],
   "autoload": {
-    "psr-0": {"": "src/"}
+    "psr-4": {"": "src/"}
   },
   "require": {
     "php": ">=5.4",

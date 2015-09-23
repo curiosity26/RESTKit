@@ -6,15 +6,18 @@
  * Time: 4:04 PM
  */
 
-namespace RESTKit\Request;
+namespace RESTKit\Request\JSON;
 
+
+use RESTKit\Request\ClientRequest;
+use RESTKit\Request\HTTPRequestInterface;
 
 class JSONRequest extends ClientRequest {
 
   public function __construct($url = null, $data = null, array $headers = array(), $port = null) {
     $headers['Accept'] = 'application/json';
     $headers['Content-Type'] = 'application/json';
-    parent::__construct(null, $url, HTTPRequest::METHOD_GET, $data, $headers, $port);
+    parent::__construct(null, $url, HTTPRequestInterface::METHOD_GET, $data, $headers, $port);
   }
 
   public function setResponseClass($class = null) {
@@ -36,9 +39,9 @@ class JSONRequest extends ClientRequest {
   }
 
   public function send() {
-    $data = $this->getData();
+    $data = $this->getBody();
     if (null !== $data) {
-      $this->request->setMethod(HTTPRequest::METHOD_JSON);
+      $this->request->setMethod(HTTPRequestInterface::METHOD_JSON);
     }
 
     return parent::send();

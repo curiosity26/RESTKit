@@ -6,7 +6,7 @@
  * Time: 4:30 PM
  */
 
-namespace RESTKit\Request;
+namespace RESTKit\Request\JSON;
 
 
 use RESTKit\Client\RESTClientInterface;

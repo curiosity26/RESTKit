@@ -11,13 +11,13 @@ namespace RESTKit\Response;
 
 use RESTKit\Client\RESTClientInterface;
 
-class Response {
+class Response implements ResponseInterface {
 
   protected $code;
   protected $headers;
 
   /**
-   * @var HTTPResponse
+   * @var HTTPResponseInterface
    */
   protected $response;
   protected $body;
@@ -27,25 +27,25 @@ class Response {
    */
   protected $client;
 
-  public function __construct(HTTPResponse $response = null)
+  public function __construct(HTTPResponseInterface $response = null)
   {
     if (isset($response)) {
       $this->setResponse($response);
     }
   }
 
-  public function setResponse(HTTPResponse $response)
+  public function setResponse(HTTPResponseInterface $response)
   {
     $this->response = $response;
     $this->setResponseCode($response->getResponseCode());
     $this->setHeaders($response->getHeaders());
-    $this->setBody($response->getResonseBody());
+    $this->setBody($response->getResponseBody());
 
     return $this;
   }
 
   /**
-   * @return \RESTKit\Response\HTTPResponse
+   * @return \RESTKit\Response\HTTPResponseInterface
    */
   public function getResponse()
   {
@@ -64,7 +64,7 @@ class Response {
     return $this->code;
   }
 
-  public function setHeaders(array $headers)
+  public function setHeaders($headers)
   {
     $this->headers = $headers;
 
