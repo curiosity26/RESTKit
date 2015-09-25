@@ -11,7 +11,7 @@ namespace RESTKit\Response;
 
 interface HTTPResponseInterface
 {
-  public function parse($rawResponse, $headerLength = 0);
+  public function parse($rawResponse);
   public function getResponseCode();
   static public function getResponseStatus($responseCode);
   public function getResponseBody();

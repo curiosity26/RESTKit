@@ -22,6 +22,9 @@ abstract class AbstractHTTPRequest implements HTTPRequestInterface, AuthRequestI
   protected $authMethod;
   protected $authCredentials;
 
+  const AUTH_BASIC = 'Basic';
+  const AUTH_DIGEST = 'Digest';
+
   public function setUrl($url)
   {
     $this->url = $url;
@@ -49,6 +52,9 @@ abstract class AbstractHTTPRequest implements HTTPRequestInterface, AuthRequestI
       )
     )) {
       $this->method = $method;
+    }
+    else {
+      $this->method = self::METHOD_GET;
     }
 
     return $this;
@@ -181,6 +187,13 @@ abstract class AbstractHTTPRequest implements HTTPRequestInterface, AuthRequestI
       $this->removeHeader('Authorization')
         ->addHeader('X-Auth-Token', $token);
     }
+  }
+
+  public function getAuthenticationTypes() {
+    return array(
+      self::AUTH_BASIC,
+      self::AUTH_DIGEST
+    );
   }
 
   public function getAuthorizationTypes() {

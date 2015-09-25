@@ -22,7 +22,7 @@ class JSONRequest extends ClientRequest {
 
   public function setResponseClass($class = null) {
     if (null !== $class
-      && in_array('RESTKit\\Response\\JSONResponse', class_parents($class))) {
+      && in_array('RESTKit\\Response\\JSON\\JSONResponse', class_parents($class))) {
       $this->response_class = $class;
     }
     else {

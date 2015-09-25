@@ -12,11 +12,7 @@ namespace RESTKit\Response\Curl;
 use RESTKit\Response\AbstractHTTPResponse;
 
 class CurlResponse extends AbstractHTTPResponse {
-  protected $rawResponse;
-  protected $rawHeader;
   protected $requestInfo = array();
-  protected $response;
-  protected $headers = array();
 
   public function __construct($rawResponse = null, $requestInfo = null)
   {
@@ -54,7 +50,7 @@ class CurlResponse extends AbstractHTTPResponse {
     $this->rawResponse = $rawResponse;
     $this->rawHeader = substr($rawResponse, 0, $headerLength);
     $this->response = substr($rawResponse, $headerLength);
-    $header_lines = explode(PHP_EOL, $this->rawHeader);
+    $header_lines = explode('\r\n', $this->rawHeader);
     $headers = array();
     if (!empty($header_lines)) {
       foreach ($header_lines as $line) {

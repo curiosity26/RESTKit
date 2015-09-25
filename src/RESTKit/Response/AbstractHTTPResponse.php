@@ -12,7 +12,6 @@ namespace RESTKit\Response;
 abstract class AbstractHTTPResponse implements HTTPResponseInterface {
   protected $rawResponse;
   protected $rawHeader;
-  protected $requestInfo = array();
   protected $response;
   protected $headers = array();
 
@@ -59,11 +58,6 @@ abstract class AbstractHTTPResponse implements HTTPResponseInterface {
     504 => "Gateway Timeout",
     505 => "HTTP Version Not Supported"
   );
-
-  public function getRequestInfo()
-  {
-    return $this->requestInfo;
-  }
 
   public function getResponseBody()
   {

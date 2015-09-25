@@ -72,7 +72,6 @@ class CurlRequest extends AbstractHTTPRequest {
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_VERBOSE => true,
         CURLOPT_COOKIEJAR => $this->getCookies(),
-        CURLOPT_COOKIEFILE => $this->getCookies(),
         CURLOPT_PORT => isset($this->port) ? $this->getPort() : 80,
         CURLOPT_FAILONERROR => false,
         CURLOPT_TIMEOUT => $this->timeout,
@@ -90,12 +89,12 @@ class CurlRequest extends AbstractHTTPRequest {
       }
     }
 
-
     if (is_string($this->cookies)) {
-      curl_setopt($this->ch, CURLOPT_COOKIE, $this->cookies);
-    } else {
-      if (is_resource($this->cookies) && get_resource_type($this->cookies) == 'file') {
+      if (file_exists($this->cookies)) {
         curl_setopt($this->ch, CURLOPT_COOKIEFILE, $this->cookies);
+      }
+      else {
+        curl_setopt($this->ch, CURLOPT_COOKIE, $this->cookies);
       }
     }
 

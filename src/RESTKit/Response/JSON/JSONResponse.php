@@ -6,7 +6,9 @@
  * Time: 3:45 PM
  */
 
-namespace RESTKit\Response;
+namespace RESTKit\Response\JSON;
+
+use RESTKit\Response\CollectionResponse;
 
 class JSONResponse extends CollectionResponse {
 
