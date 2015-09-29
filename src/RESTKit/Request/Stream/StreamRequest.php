@@ -26,8 +26,9 @@ class StreamRequest extends AbstractHTTPRequest
     }
 
     $uri = parse_url($this->getUrl(), PHP_URL_PATH);
+    $host = parse_url($this->getUrl(), PHP_URL_HOST);
 
-    $this->raw_header = "$method $uri HTTP/1.1".'\r\n'.$this->buildHeaders();
+    $this->raw_header = "$method $uri HTTP/1.1".'\r\n'."Host: $host".'\r\n'.$this->buildHeaders();
   }
 
   /**
